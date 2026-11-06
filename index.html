@@ -92,9 +92,30 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,26,18,.92
 .map-card p{color:rgba(255,255,255,.65);font-size:14px;line-height:1.65;margin-bottom:1.25rem}
 .btn-map{display:inline-block;background:var(--gold);color:#fff;padding:14px 24px;border-radius:10px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s}
 .btn-map:hover{background:#a07820;transform:translateY(-1px)}
-.map-frame{border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.15);margin-bottom:1rem;background:var(--dark)}
-.map-frame iframe{width:100%;height:520px;border:none;display:block}
-@media (min-width:768px){.map-frame iframe{height:600px}}
+.map-filter{cursor:pointer;font-family:'DM Sans',sans-serif}
+.map-filter .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.map-filter.active{background:var(--green);border-color:var(--green);color:#fff}
+.map-view{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.15);margin-bottom:.75rem;background:var(--dark);aspect-ratio:16/9;touch-action:none;user-select:none;-webkit-user-select:none}
+.map-view:fullscreen{border-radius:0;aspect-ratio:auto;width:100%;height:100%}
+.map-canvas{position:absolute;left:0;top:0;width:100%;height:100%;transform-origin:0 0;will-change:transform;cursor:grab}
+.map-canvas.dragging{cursor:grabbing}
+.map-canvas img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.map-pin{position:absolute;width:34px;height:34px;margin:0;padding:0;border-radius:50%;border:3px solid var(--pin-color,#e0b84a);background:rgba(14,26,18,.92);color:#fff;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transform:translate(-50%,-50%) scale(var(--pin-scale,1));box-shadow:0 2px 8px rgba(0,0,0,.45);transition:box-shadow .2s;z-index:2}
+.map-pin:hover,.map-pin:focus-visible{box-shadow:0 0 0 3px rgba(184,146,42,.6),0 2px 8px rgba(0,0,0,.45);outline:none}
+.map-pin.hidden{display:none}
+.map-controls{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:8px;z-index:4}
+.map-controls button{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(14,26,18,.88);color:#fff;font-size:20px;line-height:1;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.map-controls button:hover{background:var(--green)}
+.map-controls button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.map-popup{position:absolute;z-index:5;width:min(260px,78%);background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.35);padding:14px 16px;text-align:left}
+.map-popup h3{font-family:'Playfair Display',serif;font-size:17px;color:var(--dark);line-height:1.25;margin-bottom:4px;padding-right:22px}
+.map-popup .map-pop-cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.map-popup .map-pop-cat .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.map-popup p{font-size:13px;color:var(--muted);line-height:1.55;margin:0}
+.map-pop-close{position:absolute;top:6px;right:8px;border:none;background:none;font-size:20px;line-height:1;color:var(--muted);cursor:pointer;padding:4px}
+.map-hint{font-size:12px;color:var(--muted);text-align:center;margin-bottom:.5rem;line-height:1.5}
+.map-img-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--dark);color:rgba(255,255,255,.75);font-size:14px;text-align:center;padding:1rem;z-index:3}
+.map-img-fallback a{color:var(--gold);font-weight:500}
 .map-fallback{font-size:13px;color:var(--muted);text-align:center;margin-bottom:.5rem}
 .map-fallback a{color:var(--green);font-weight:500}
 .map-credit{font-size:12px;color:var(--muted);margin-top:1rem;text-align:center}
@@ -399,21 +420,41 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
   <div class="section-eyebrow">Mapa interactivo oficial</div>
   <h2 class="section-title serif">Recorre el parque en 3D</h2>
   <p class="section-body">Gira, acerca y toca cada punto para descubrir qué te espera en TORAM.</p>
-  <div class="map-filters" aria-label="Filtros del mapa interactivo oficial">
-    <span class="map-filter todo">Todo</span>
-    <span class="map-filter">Aventura</span>
-    <span class="map-filter">Agua</span>
-    <span class="map-filter">Cultura</span>
+  <div class="map-filters" role="group" aria-label="Filtros del mapa interactivo">
+    <button type="button" class="map-filter todo active" data-filter="todo" aria-pressed="true"><span class="dot" style="background:#fff"></span>Todo</button>
+    <button type="button" class="map-filter" data-filter="aventura" aria-pressed="false"><span class="dot" style="background:#f76b00"></span>Aventura</button>
+    <button type="button" class="map-filter" data-filter="agua" aria-pressed="false"><span class="dot" style="background:#2bb3c9"></span>Agua</button>
+    <button type="button" class="map-filter" data-filter="cultura" aria-pressed="false"><span class="dot" style="background:#e0b84a"></span>Cultura</button>
   </div>
-  <div class="map-frame">
-    <iframe src="https://toramparque.com/atracciones/" title="Mapa interactivo 3D de TORAM Parque Temático" loading="lazy" allowfullscreen></iframe>
+  <div class="map-view" id="mapView">
+    <div class="map-canvas" id="mapCanvas">
+      <img id="mapImg" src="https://toramparque.com/media/atracciones/mapa-parque.webp" alt="Mapa del parque temático TORAM en Mazatlán" loading="lazy" draggable="false">
+      <div id="mapPins"></div>
+    </div>
+    <div class="map-img-fallback" id="mapImgFallback" hidden>
+      <p>La imagen del mapa no pudo cargar.</p>
+      <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">Ver el mapa 3D oficial en toramparque.com ↗</a>
+    </div>
+    <div class="map-controls">
+      <button type="button" id="mapZoomIn" aria-label="Acercar el mapa">+</button>
+      <button type="button" id="mapZoomOut" aria-label="Alejar el mapa">&minus;</button>
+      <button type="button" id="mapReset" aria-label="Restablecer la vista del mapa">&#10227;</button>
+      <button type="button" id="mapFull" aria-label="Ver el mapa a pantalla completa">&#9974;</button>
+    </div>
+    <div class="map-popup" id="mapPopup" hidden>
+      <button type="button" class="map-pop-close" id="mapPopClose" aria-label="Cerrar">&times;</button>
+      <h3 id="mapPopTitle"></h3>
+      <span class="map-pop-cat"><span class="dot" id="mapPopDot"></span><span id="mapPopCat"></span></span>
+      <p id="mapPopDesc"></p>
+    </div>
   </div>
-  <p class="map-fallback">Si el mapa no carga, <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">ábrelo en el sitio oficial de TORAM ↗</a></p>
+  <p class="map-hint">Arrastra para recorrer el parque &middot; Pellizca o usa + / &minus; para acercar &middot; Toca un punto para ver la atracci&oacute;n</p>
+  <p class="map-fallback">Si el mapa no carga, <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">&aacute;brelo en el sitio oficial de TORAM &nearr;</a></p>
   <div class="map-card">
-    <p>El mapa interactivo oficial de TORAM Parque Temático te muestra las atracciones en 3D: gira el parque, acércalo y toca cada punto para ver qué hay en cada zona — aventura, agua y cultura.</p>
-    <a class="btn-map" href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">Abrir el mapa en pantalla completa ↗</a>
+    <p>El mapa interactivo oficial de TORAM Parque Tem&aacute;tico te muestra las atracciones en 3D: gira el parque, ac&eacute;rcalo y toca cada punto para ver qu&eacute; hay en cada zona &mdash; aventura, agua y cultura.</p>
+    <a class="btn-map" href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">Ver el mapa 3D oficial &nearr;</a>
   </div>
-  <p class="map-credit">Mapa interactivo oficial de TORAM Parque Temático — <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">toramparque.com/atracciones/</a></p>
+  <p class="map-credit">Imagen del parque: TORAM Parque Tem&aacute;tico &mdash; <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">toramparque.com/atracciones/</a></p>
 </section>
 
 <!-- VIDEO 2 -->
@@ -691,6 +732,195 @@ window.addEventListener('scroll',()=>{
     l.classList.toggle('active',t.includes("'"+current+"'"));
   });
 },{ passive:true });
+</script>
+
+<script>
+/* ── MAPA INTERACTIVO NATIVO ──
+   Render oficial del parque (toramparque.com), con puntos de interés,
+   filtros por categoría, paneo, zoom (rueda / pellizco / botones),
+   restablecer y pantalla completa. */
+(function(){
+  var view=document.getElementById('mapView');
+  if(!view)return;
+  var canvas=document.getElementById('mapCanvas');
+  var img=document.getElementById('mapImg');
+  var pinsBox=document.getElementById('mapPins');
+  var popup=document.getElementById('mapPopup');
+  var popTitle=document.getElementById('mapPopTitle');
+  var popCat=document.getElementById('mapPopCat');
+  var popDot=document.getElementById('mapPopDot');
+  var popDesc=document.getElementById('mapPopDesc');
+
+  var CATS={
+    aventura:{label:'Aventura',color:'#f76b00'},
+    agua:{label:'Agua',color:'#2bb3c9'},
+    cultura:{label:'Cultura',color:'#e0b84a'},
+    residencial:{label:'Residencial',color:'#a9b54a'},
+    servicios:{label:'Servicios',color:'#e5e1e6'}
+  };
+  /* x / y en % sobre la imagen 1600x900. Descripciones verificadas en
+     toramparque.com/atracciones/ salvo las indicadas en el PR. */
+  var POIS=[
+    {name:'Tirolesa · Torre norte',cat:'aventura',icon:'⛰',x:21.6,y:7.6,desc:'Vuela sobre el paisaje de Mazatlán con vistas panorámicas del parque y la costa.'},
+    {name:'Ruta Razer',cat:'aventura',icon:'🚗',x:18.8,y:27.8,desc:'Una ruta emocionante y divertida a campo abierto, llena de sorpresas en cada tramo.'},
+    {name:'Caída de gravedad',cat:'aventura',icon:'⬇',x:21.3,y:40.9,desc:'Juego de caída libre para quienes buscan adrenalina pura, en medio de la selva del parque.'},
+    {name:'Playa artificial',cat:'agua',icon:'🏖',x:43.1,y:50.0,desc:'Club de playa privada artificial para que disfrutes con toda tu familia.'},
+    {name:'Río subterráneo',cat:'agua',icon:'〜',x:51.9,y:41.3,desc:'Un recorrido místico bajo tierra por los canales del parque.'},
+    {name:'Cenote',cat:'agua',icon:'💧',x:64.4,y:53.6,desc:'Un descenso a un entorno subterráneo lleno de calma y misterio, perfecto para desconectar.'},
+    {name:'Tirolesa · Torre este',cat:'aventura',icon:'⛰',x:72.4,y:52.2,desc:'Vuela sobre el paisaje de Mazatlán con vistas panorámicas del parque y la costa.'},
+    {name:'Museo en pirámide',cat:'cultura',icon:'🏛',x:69.9,y:66.4,desc:'La nación Totorame contada a través de tecnología, historia y ciencia.'},
+    {name:'Ruta de kayaks',cat:'agua',icon:'🛶',x:77.2,y:63.9,desc:'Un recorrido tranquilo en kayak por canales rodeados de naturaleza, ideal para disfrutar en familia.'},
+    {name:'Entrada principal',cat:'servicios',icon:'🚪',x:83.4,y:72.2,desc:'Acceso principal al parque, con estacionamiento, información y servicios para visitantes.'},
+    {name:'Torre 1',cat:'residencial',icon:'🏢',x:52.8,y:65.6,desc:'Torre residencial integrada al parque, con alberca y amenidades frente a las atracciones.'},
+    {name:'Torre 2',cat:'residencial',icon:'🏢',x:42.0,y:65.6,desc:'Torre residencial integrada al parque, con alberca y amenidades frente a las atracciones.'},
+    {name:'Torre 3',cat:'residencial',icon:'🏢',x:30.4,y:65.6,desc:'Torre residencial integrada al parque, con alberca y amenidades frente a las atracciones.'},
+    {name:'Torre 4',cat:'residencial',icon:'🏢',x:18.8,y:65.6,desc:'Torre residencial integrada al parque, con alberca y amenidades frente a las atracciones.'}
+  ];
+
+  var scale=1, tx=0, ty=0, filter='todo';
+  var MIN_S=1, MAX_S=3;
+
+  function apply(){
+    canvas.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')';
+    pinsBox.style.setProperty('--pin-scale', 1/scale);
+  }
+  function clamp(){
+    var vw=view.clientWidth, vh=view.clientHeight;
+    var iw=vw*scale, ih=vh*scale;
+    tx=Math.min(0,Math.max(vw-iw,tx));
+    ty=Math.min(0,Math.max(vh-ih,ty));
+    if(scale<=1){tx=0;ty=0;}
+  }
+  function zoomAt(cx,cy,f){
+    var ns=Math.min(MAX_S,Math.max(MIN_S,scale*f));
+    var k=ns/scale;
+    tx=cx-(cx-tx)*k; ty=cy-(cy-ty)*k;
+    scale=ns; clamp(); apply(); hidePopup();
+  }
+  function resetView(){scale=1;tx=0;ty=0;apply();hidePopup();}
+
+  /* Pins */
+  var pinEls=[];
+  POIS.forEach(function(p){
+    var b=document.createElement('button');
+    b.type='button';
+    b.className='map-pin';
+    b.style.left=p.x+'%';
+    b.style.top=p.y+'%';
+    b.style.setProperty('--pin-color',CATS[p.cat].color);
+    b.setAttribute('aria-label',p.name+' · '+CATS[p.cat].label);
+    b.textContent=p.icon;
+    b.addEventListener('click',function(e){e.stopPropagation();showPopup(p,b);});
+    pinsBox.appendChild(b);
+    pinEls.push({el:b,cat:p.cat,data:p});
+  });
+
+  function showPopup(p,pinEl){
+    popTitle.textContent=p.name;
+    popCat.textContent=CATS[p.cat].label;
+    popDot.style.background=CATS[p.cat].color;
+    popDesc.textContent=p.desc||'';
+    popDesc.style.display=p.desc?'':'none';
+    popup.hidden=false;
+    /* Posición en pantalla: punto del pin transformado a coords del viewport */
+    var vw=view.clientWidth, vh=view.clientHeight;
+    var px=(p.x/100)*vw*scale+tx, py=(p.y/100)*vh*scale+ty;
+    var pw=popup.offsetWidth||260, ph=popup.offsetHeight||120;
+    var left=Math.min(Math.max(8,px-pw/2),vw-pw-8);
+    var top=py+22; if(top+ph>vh-8)top=py-ph-22;
+    if(top<8)top=8;
+    popup.style.left=left+'px'; popup.style.top=top+'px';
+    document.getElementById('mapPopClose').focus();
+  }
+  function hidePopup(){popup.hidden=true;}
+
+  document.getElementById('mapPopClose').addEventListener('click',function(e){e.stopPropagation();hidePopup();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')hidePopup();});
+
+  /* Filtros: TODO muestra todo; cada categoría muestra solo sus puntos.
+     Las torres residenciales y la entrada (servicios) solo se ven en TODO. */
+  document.querySelectorAll('.map-filter').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      filter=btn.getAttribute('data-filter');
+      document.querySelectorAll('.map-filter').forEach(function(b){
+        var on=b===btn; b.classList.toggle('active',on); b.setAttribute('aria-pressed',on?'true':'false');
+      });
+      pinEls.forEach(function(pe){
+        pe.el.classList.toggle('hidden',!(filter==='todo'||pe.cat===filter));
+      });
+      hidePopup();
+    });
+  });
+
+  /* Paneo por arrastre (ratón y táctil) */
+  var pointers=new Map(), startDist=0, startScale=1, lastX=0, lastY=0, moved=false;
+  view.addEventListener('pointerdown',function(e){
+    if(e.target.closest('.map-controls')||e.target.closest('.map-popup'))return;
+    view.setPointerCapture(e.pointerId);
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    lastX=e.clientX; lastY=e.clientY; moved=false;
+    canvas.classList.add('dragging');
+    if(pointers.size===2){
+      var pts=Array.from(pointers.values());
+      startDist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+      startScale=scale;
+    }
+  });
+  view.addEventListener('pointermove',function(e){
+    if(!pointers.has(e.pointerId))return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===2){
+      var pts=Array.from(pointers.values());
+      var d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+      if(startDist>0){
+        var r=view.getBoundingClientRect();
+        zoomAt((pts[0].x+pts[1].x)/2-r.left,(pts[0].y+pts[1].y)/2-r.top,startScale*Math.max(0.5,Math.min(2,d/startDist))/scale);
+      }
+      moved=true; return;
+    }
+    var dx=e.clientX-lastX, dy=e.clientY-lastY;
+    lastX=e.clientX; lastY=e.clientY;
+    if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
+    tx+=dx; ty+=dy; clamp(); apply();
+  });
+  function endPointer(e){
+    pointers.delete(e.pointerId);
+    if(pointers.size===0)canvas.classList.remove('dragging');
+  }
+  view.addEventListener('pointerup',endPointer);
+  view.addEventListener('pointercancel',endPointer);
+  view.addEventListener('click',function(e){
+    if(!moved&&!e.target.closest('.map-pin')&&!e.target.closest('.map-controls')&&!e.target.closest('.map-popup'))hidePopup();
+  });
+
+  /* Zoom con rueda, centrado en el cursor */
+  view.addEventListener('wheel',function(e){
+    e.preventDefault();
+    var r=view.getBoundingClientRect();
+    zoomAt(e.clientX-r.left,e.clientY-r.top,e.deltaY<0?1.15:1/1.15);
+  },{passive:false});
+
+  /* Botones */
+  document.getElementById('mapZoomIn').addEventListener('click',function(){
+    zoomAt(view.clientWidth/2,view.clientHeight/2,1.5);
+  });
+  document.getElementById('mapZoomOut').addEventListener('click',function(){
+    zoomAt(view.clientWidth/2,view.clientHeight/2,1/1.5);
+  });
+  document.getElementById('mapReset').addEventListener('click',resetView);
+  document.getElementById('mapFull').addEventListener('click',function(){
+    if(document.fullscreenElement){document.exitFullscreen();}
+    else if(view.requestFullscreen){view.requestFullscreen();}
+  });
+  document.addEventListener('fullscreenchange',function(){clamp();apply();});
+
+  /* Fallback si la imagen oficial no carga */
+  img.addEventListener('error',function(){
+    document.getElementById('mapImgFallback').hidden=false;
+  });
+
+  apply();
+})();
 </script>
 </body>
 </html>
