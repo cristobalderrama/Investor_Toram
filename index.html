@@ -107,7 +107,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,26,18,.92
 .map-controls button{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(14,26,18,.88);color:#fff;font-size:20px;line-height:1;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .map-controls button:hover{background:var(--green)}
 .map-controls button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.map-popup{position:absolute;z-index:5;width:min(260px,78%);background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.35);padding:14px 16px;text-align:left}
+.map-popup{position:absolute;z-index:5;width:min(260px,78%);max-height:calc(100% - 16px);overflow:auto;background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.35);padding:14px 16px;text-align:left}
 .map-popup h3{font-family:'Playfair Display',serif;font-size:17px;color:var(--dark);line-height:1.25;margin-bottom:4px;padding-right:22px}
 .map-popup .map-pop-cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .map-popup .map-pop-cat .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -468,11 +468,6 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
   </div>
   <p class="map-hint">Arrastra para recorrer el parque &middot; Pellizca o usa + / &minus; para acercar &middot; Toca un punto para ver la atracci&oacute;n</p>
   <p class="map-fallback">Si el mapa no carga, <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">&aacute;brelo en el sitio oficial de TORAM &nearr;</a></p>
-  <div class="map-card">
-    <p>El mapa interactivo oficial de TORAM Parque Tem&aacute;tico te muestra las atracciones en 3D: gira el parque, ac&eacute;rcalo y toca cada punto para ver qu&eacute; hay en cada zona &mdash; aventura, agua, cultura y residencial.</p>
-    <a class="btn-map" href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">Ver el mapa 3D oficial &nearr;</a>
-  </div>
-  <p class="map-credit">Imagen del parque: TORAM Parque Tem&aacute;tico &mdash; <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">toramparque.com/atracciones/</a></p>
   </div>
 </section>
 
@@ -845,9 +840,14 @@ window.addEventListener('scroll',()=>{
     var vw=view.clientWidth, vh=view.clientHeight;
     var px=(p.x/100)*vw*scale+tx, py=(p.y/100)*vh*scale+ty;
     var pw=popup.offsetWidth||260, ph=popup.offsetHeight||120;
-    var left=Math.min(Math.max(8,px-pw/2),vw-pw-8);
+    /* El limite superior tambien debe ser >=8: si el popup es mas ancho
+       que la vista, vw-pw-8 es negativo y el popup quedaba recortado en
+       el borde izquierdo (visto en movil con Museo). */
+    var maxLeft=Math.max(8,vw-pw-8);
+    var left=Math.min(Math.max(8,px-pw/2),maxLeft);
     var top=py+22; if(top+ph>vh-8)top=py-ph-22;
     if(top<8)top=8;
+    if(top+ph>vh-8)top=Math.max(8,vh-ph-8);
     popup.style.left=left+'px'; popup.style.top=top+'px';
     document.getElementById('mapPopClose').focus();
   }
@@ -876,18 +876,39 @@ window.addEventListener('scroll',()=>{
     });
   });
 
-  /* Paneo por arrastre (ratón y táctil) */
-  var pointers=new Map(), startDist=0, startScale=1, lastX=0, lastY=0, moved=false;
+  /* Paneo por arrastre (raton y tactil) con distincion toque vs. arrastre.
+     Causa del fallo anterior: pointerdown llamaba setPointerCapture sobre
+     el contenedor, asi que el 'click' posterior se disparaba sobre el
+     contenedor y nunca sobre el pin (el teclado si funcionaba porque no
+     pasa por eventos de puntero). Ahora la captura solo se toma cuando el
+     puntero se mueve mas alla del umbral de toque, y un toque sobre un pin
+     abre su popup en pointerup. El arrastre que empieza sobre un pin sigue
+     funcionando: al superar el umbral se convierte en paneo. */
+  var TAP_SLOP=8; /* px: movimiento maximo para considerarlo un toque */
+  var pointers=new Map(), startDist=0, startScale=1, lastX=0, lastY=0,
+      moved=false, dragging=false, downPin=null, downX=0, downY=0,
+      suppressClick=false, captureTaken=false;
+  function pinOfTarget(t){return (t&&t.closest)?t.closest('.map-pin'):null;}
+  function pinDataFor(el){
+    for(var i=0;i<pinEls.length;i++)if(pinEls[i].el===el)return pinEls[i];
+    return null;
+  }
   view.addEventListener('pointerdown',function(e){
     if(e.target.closest('.map-controls')||e.target.closest('.map-popup'))return;
-    view.setPointerCapture(e.pointerId);
+    suppressClick=false;
+    downPin=pinOfTarget(e.target);
+    downX=e.clientX; downY=e.clientY;
+    dragging=false; moved=false; captureTaken=false;
     pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    lastX=e.clientX; lastY=e.clientY; moved=false;
-    canvas.classList.add('dragging');
+    lastX=e.clientX; lastY=e.clientY;
     if(pointers.size===2){
       var pts=Array.from(pointers.values());
       startDist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
       startScale=scale;
+      dragging=true; moved=true;
+      try{view.setPointerCapture(e.pointerId);}catch(_){}
+      captureTaken=true;
+      canvas.classList.add('dragging');
     }
   });
   view.addEventListener('pointermove',function(e){
@@ -900,20 +921,42 @@ window.addEventListener('scroll',()=>{
         var r=view.getBoundingClientRect();
         zoomAt((pts[0].x+pts[1].x)/2-r.left,(pts[0].y+pts[1].y)/2-r.top,startScale*Math.max(0.5,Math.min(2,d/startDist))/scale);
       }
-      moved=true; return;
+      moved=true; dragging=true; return;
     }
     var dx=e.clientX-lastX, dy=e.clientY-lastY;
     lastX=e.clientX; lastY=e.clientY;
-    if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
+    if(!dragging&&Math.hypot(e.clientX-downX,e.clientY-downY)>TAP_SLOP){
+      dragging=true; moved=true;
+      try{view.setPointerCapture(e.pointerId);}catch(_){}
+      captureTaken=true;
+      canvas.classList.add('dragging');
+      hidePopup(); /* el pin se mueve con el mapa: no dejar un popup huerfano */
+    }
+    if(!dragging)return;
     tx+=dx; ty+=dy; clamp(); apply();
   });
   function endPointer(e){
+    var wasDrag=dragging, wasPin=downPin;
     pointers.delete(e.pointerId);
-    if(pointers.size===0)canvas.classList.remove('dragging');
+    if(pointers.size===0){
+      canvas.classList.remove('dragging');
+      dragging=false; captureTaken=false;
+      if(!wasDrag&&wasPin){
+        /* Toque (raton o tactil) sobre un pin: abrir su popup. El
+           listener 'click' del pin tambien puede dispararse despues;
+           showPopup es idempotente, y el click en la vista se suprime. */
+        var pe=pinDataFor(wasPin);
+        if(pe){showPopup(pe.data,pe.el);suppressClick=true;}
+      }else if(!wasDrag&&!e.target.closest('.map-controls')&&!e.target.closest('.map-popup')){
+        hidePopup(); /* toque en una zona vacia del mapa */
+      }
+      downPin=null;
+    }
   }
   view.addEventListener('pointerup',endPointer);
   view.addEventListener('pointercancel',endPointer);
   view.addEventListener('click',function(e){
+    if(suppressClick){suppressClick=false;return;}
     if(!moved&&!e.target.closest('.map-pin')&&!e.target.closest('.map-controls')&&!e.target.closest('.map-popup'))hidePopup();
   });
 
