@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toram · Parque Temático · Inversión</title>
 <meta name="description" content="Sé parte del primer parque temático del norte de México. Retornos trimestrales, fideicomiso inmobiliario y beneficios exclusivos para inversionistas.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1a12'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='36' fill='%23b8922a' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Toram · Parque Temático · Inversión">
+<meta property="og:description" content="Sé parte del primer parque temático del norte de México. Retornos trimestrales, fideicomiso inmobiliario y beneficios exclusivos para inversionistas.">
+<meta property="og:url" content="https://cristobalderrama.github.io/Investor_Toram/">
+<meta property="og:site_name" content="Toram · Inversión">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Toram · Parque Temático · Inversión">
+<meta name="twitter:description" content="Sé parte del primer parque temático del norte de México. Retornos trimestrales, fideicomiso inmobiliario y beneficios exclusivos para inversionistas.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Organization","name":"Toram Residencial y Parque Temático S.A. de C.V.","url":"https://toramparque.com/","description":"Primer parque temático del norte de México, en Mazatlán, Sinaloa."},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"¿Qué pasa con mi dinero si el parque no abre en la fecha prometida?","acceptedAnswer":{"@type":"Answer","text":"El contrato (Cláusula 6) establece una penalización de 0.2% mensual sobre el total de tus abonos de capital, a tu favor, hasta que el parque abra."}},
+{"@type":"Question","name":"¿Las proyecciones de retorno son garantizadas?","acceptedAnswer":{"@type":"Answer","text":"Las proyecciones son estimaciones basadas en datos reales y no son cifras garantizadas contractualmente; el retorno real depende del desempeño operativo del parque."}},
+{"@type":"Question","name":"¿Cómo se calculan mis ganancias exactamente?","acceptedAnswer":{"@type":"Answer","text":"Utilidad neta del período, según estados financieros certificados, multiplicada por el número de participaciones propias dividido entre 2,000 participaciones totales."}},
+{"@type":"Question","name":"¿Puedo dejar mi participación en herencia o venderla?","acceptedAnswer":{"@type":"Answer","text":"Sí. Según la Cláusula 20 del contrato, puedes ceder, traspasar, heredar, vender o donar tus derechos a cualquier tercero."}}
+]}]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -64,6 +83,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,26,18,.92
 .scroll-hint{position:absolute;bottom:1.5rem;right:1.5rem;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:.4}
 .scroll-hint span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#fff;writing-mode:vertical-rl}
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,.6));animation:scrollPulse 2s infinite}
+
+.advisor-badge{display:inline-block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(184,146,42,.55);border-radius:20px;padding:5px 12px;margin-bottom:1rem}
+.map-filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 1.25rem}
+.map-filter{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--white);color:var(--muted)}
+.map-filter.todo{background:var(--green);border-color:var(--green);color:#fff}
+.map-card{background:var(--dark);border-radius:16px;padding:1.5rem;text-align:center}
+.map-card p{color:rgba(255,255,255,.65);font-size:14px;line-height:1.65;margin-bottom:1.25rem}
+.btn-map{display:inline-block;background:var(--gold);color:#fff;padding:14px 24px;border-radius:10px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s}
+.btn-map:hover{background:#a07820;transform:translateY(-1px)}
+.map-credit{font-size:12px;color:var(--muted);margin-top:1rem;text-align:center}
+.map-credit a{color:var(--green);font-weight:500}
 
 /* ── SECTIONS ── */
 section{max-width:520px;margin:0 auto;padding:3rem 1.25rem}
@@ -194,6 +224,7 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
       <button class="nav-link" onclick="navTo('inversion')">Inversión</button>
       <button class="nav-link" onclick="navTo('parque')">Parque</button>
       <button class="nav-link" onclick="navTo('faq')">FAQ</button>
+      <button class="nav-link" onclick="navTo('mapa')">Mapa 3D</button>
       <button class="nav-link" onclick="navTo('contacto')">Contacto</button>
     </div>
   </div>
@@ -205,6 +236,7 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
   <div class="hero-pattern"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">Mazatlán, Sinaloa · Un proyecto de $2,000,000,000 MXN</div>
+    <p class="advisor-badge">Sitio del asesor — Cristobal Rafael</p>
     <h1 class="hero-title serif">Sé propietario de un activo de <em>dos mil millones</em></h1>
     <p class="hero-sub">Toram es el complejo más ambicioso del norte de México — parque temático, residencial y plaza comercial en un solo destino. Por primera vez, cualquier persona puede ser parte de él desde $1,150,000 MXN.</p>
     <div class="hero-stats">
@@ -233,6 +265,7 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
     <iframe
       src="https://www.youtube.com/embed/Szk8dV2jSzA?rel=0&modestbranding=1&color=white"
       title="Toram Residencial y Parque Temático — Video oficial"
+      loading="lazy"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
       style="position:absolute;top:0;left:0;width:100%;height:100%;border:none">
@@ -248,17 +281,17 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
   <p class="section-body">Proyectos de esta escala — un complejo con parque temático, residencial y plaza comercial en un destino turístico de 4 millones de visitantes al año — normalmente solo están al alcance de grandes corporaciones o fondos de inversión institucionales. Toram rompe eso. Por primera vez, una participación en este activo está disponible para cualquier persona que quiera ser propietaria de algo extraordinario.</p>
 
   <div class="card">
-    <div class="card-head"><div class="card-icon">🏛</div><div class="card-title">Un complejo sin precedente en el norte de México</div></div>
+    <div class="card-head"><div class="card-icon" aria-hidden="true">🏛</div><div class="card-title">Un complejo sin precedente en el norte de México</div></div>
     <div class="card-body">No es solo un parque — es un destino completo: parque temático basado en la cultura Totorame, cuatro torres residenciales, plaza comercial y más de 15 experiencias únicas en 8 hectáreas. El valor total del terreno es de $400,000,000 MXN y el proyecto construido supera los $2,000,000,000 MXN. Respaldado por arqueólogos, historiadores e ingenieros de talla internacional.</div>
     <span class="pill pill-g">Único en su tipo en el norte de México</span>
   </div>
   <div class="card">
-    <div class="card-head"><div class="card-icon">📈</div><div class="card-title">Mazatlán: el destino con mayor impulso turístico de México</div></div>
+    <div class="card-head"><div class="card-icon" aria-hidden="true">📈</div><div class="card-title">Mazatlán: el destino con mayor impulso turístico de México</div></div>
     <div class="card-body">Más de 4 millones de visitantes al año. 21 nuevos proyectos hoteleros con inversión superior a 400 millones de euros. Top 2 en inversión turística, inmobiliaria y de negocios en todo México. El contexto donde nace Toram no podría ser más favorable — y eso es lo que hace que sus proyecciones sean creíbles.</div>
     <span class="pill pill-gold">El destino correcto, en el momento correcto</span>
   </div>
   <div class="card">
-    <div class="card-head"><div class="card-icon">🏦</div><div class="card-title">Tres fuentes de ingreso en un solo activo</div></div>
+    <div class="card-head"><div class="card-icon" aria-hidden="true">🏦</div><div class="card-title">Tres fuentes de ingreso en un solo activo</div></div>
     <div class="card-body">Como socio, participas en la totalidad de los ingresos del complejo: venta de boletos del parque, renta de locales comerciales y venta de souvenirs y experiencias. No dependes de una sola fuente — son tres flujos de ingresos simultáneos en un mismo activo de dos mil millones de pesos.</div>
     <span class="pill pill-g">Diversificación dentro de un mismo proyecto</span>
   </div>
@@ -278,10 +311,10 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
 
   <div class="slider-section">
     <div class="slider-top">
-      <span class="slider-label">Número de participaciones</span>
+      <label class="slider-label" for="parts-range">Número de participaciones</label>
       <span class="slider-val" id="parts-label">1</span>
     </div>
-    <input type="range" min="1" max="10" value="1" step="1" oninput="calcROI(this.value)">
+    <input type="range" id="parts-range" aria-label="Número de participaciones" min="1" max="10" value="1" step="1" oninput="calcROI(this.value)">
     <div class="inv-total">Inversión total: <strong id="total-inv">$1,150,000 MXN</strong></div>
     <div class="inv-total" style="font-size:12px">Más $30,000 MXN de gastos administrativos por participación (pago único).</div>
   </div>
@@ -314,8 +347,8 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
   </div>
 
   <div class="card" style="margin-top:1rem;border-left:3px solid var(--gold)">
-    <div class="card-head"><div class="card-icon">💎</div><div class="card-title">Ganas desde antes de que abra</div></div>
-    <div class="card-body">El precio de participación sube por bloques conforme avanza la comercialización. Bloque actual: $1,150,000. El siguiente arranca en $1,200,000. Eso significa que quien entra hoy ya tiene una plusvalía inmediata — sin que el parque haya abierto todavía. Es la única inversión donde el activo sube de precio mientras se construye, y luego genera rendimiento cuando opera.</div>
+    <div class="card-head"><div class="card-icon" aria-hidden="true">💎</div><div class="card-title">Ganas desde antes de que abra</div></div>
+    <div class="card-body">El precio de participación sube por bloques conforme avanza la comercialización. Bloque actual: $1,150,000. El siguiente arranca en $1,200,000. Eso significa que quien entra hoy puede capturar la plusvalía del bloque actual — sin que el parque haya abierto todavía. Es una inversión donde el activo puede subir de precio mientras se construye, y luego genera rendimiento cuando opera.</div>
     <span class="pill pill-gold">Plusvalía antes de la apertura + rendimiento después</span>
   </div>
 </section>
@@ -327,25 +360,25 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
   <p class="section-body">Toram combina lo que ningún otro proyecto en el norte de México tiene junto: la inspiración cultural de la civilización Totorame, la aventura de más de 15 atracciones únicas, cuatro torres residenciales y una plaza comercial — todo en 8 hectáreas sobre Av. Paseo del Pacífico, en la ciudad turística de mayor crecimiento en México.</p>
 
   <div class="act-grid">
-    <div class="act-item"><div class="act-emoji">🪂</div><div class="act-label">Tirolesa</div></div>
-    <div class="act-item"><div class="act-emoji">🏺</div><div class="act-label">Museo Totorame</div></div>
-    <div class="act-item"><div class="act-emoji">🦕</div><div class="act-label">Tierra de Gigantes</div></div>
-    <div class="act-item"><div class="act-emoji">🌊</div><div class="act-label">Río subterráneo</div></div>
-    <div class="act-item"><div class="act-emoji">🛁</div><div class="act-label">Spa hidroterapia</div></div>
-    <div class="act-item"><div class="act-emoji">🏖</div><div class="act-label">Playa artificial</div></div>
-    <div class="act-item"><div class="act-emoji">🛶</div><div class="act-label">Kayaks</div></div>
-    <div class="act-item"><div class="act-emoji">🤿</div><div class="act-label">Snorkel</div></div>
-    <div class="act-item"><div class="act-emoji">🌀</div><div class="act-label">Cenote</div></div>
-    <div class="act-item"><div class="act-emoji">🎭</div><div class="act-label">Show nocturno</div></div>
-    <div class="act-item"><div class="act-emoji">🚙</div><div class="act-label">Ruta RZR 4x4</div></div>
-    <div class="act-item"><div class="act-emoji">🦜</div><div class="act-label">Fauna: flamingos, venados, tortugas</div></div>
-    <div class="act-item"><div class="act-emoji">🔮</div><div class="act-label">Juegos inmersivos</div></div>
-    <div class="act-item"><div class="act-emoji">🏔</div><div class="act-label">Pirámide del Calón</div></div>
-    <div class="act-item"><div class="act-emoji">🌿</div><div class="act-label">Área de reserva natural</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🪂</div><div class="act-label">Tirolesa</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🏺</div><div class="act-label">Museo Totorame</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🦕</div><div class="act-label">Tierra de Gigantes</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🌊</div><div class="act-label">Río subterráneo</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🛁</div><div class="act-label">Spa hidroterapia</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🏖</div><div class="act-label">Playa artificial</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🛶</div><div class="act-label">Kayaks</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🤿</div><div class="act-label">Snorkel</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🌀</div><div class="act-label">Cenote</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🎭</div><div class="act-label">Show nocturno</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🚙</div><div class="act-label">Ruta RZR 4x4</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🦜</div><div class="act-label">Fauna: flamingos, venados, tortugas</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🔮</div><div class="act-label">Juegos inmersivos</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🏔</div><div class="act-label">Pirámide del Calón</div></div>
+    <div class="act-item"><div class="act-emoji" aria-hidden="true">🌿</div><div class="act-label">Área de reserva natural</div></div>
   </div>
 
   <div class="card" style="margin-top:1rem">
-    <div class="card-head"><div class="card-icon">📍</div><div class="card-title">Ubicación que multiplica el valor</div></div>
+    <div class="card-head"><div class="card-icon" aria-hidden="true">📍</div><div class="card-title">Ubicación que multiplica el valor</div></div>
     <div class="card-body">Sobre Av. Paseo del Pacífico — el corredor de mayor desarrollo de Mazatlán. Un terreno de 50,000 m² valuado en $400,000,000 MXN en una ciudad que recibe 4 millones de turistas al año y está en el Top 2 de inversión en México. La ubicación no es un detalle — es parte fundamental del valor del activo.</div>
     <div style="margin-top:.75rem">
       <div class="loc-item"><div class="loc-dot"></div><div class="loc-name">Hospital General</div><div class="loc-dist">3 min</div></div>
@@ -354,6 +387,24 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
       <div class="loc-item"><div class="loc-dot"></div><div class="loc-name">Real del Valle</div><div class="loc-dist">5 min</div></div>
     </div>
   </div>
+</section>
+
+<!-- MAPA INTERACTIVO 3D -->
+<section id="mapa" class="reveal">
+  <div class="section-eyebrow">Mapa interactivo oficial</div>
+  <h2 class="section-title serif">Recorre el parque en 3D</h2>
+  <p class="section-body">Gira, acerca y toca cada punto para descubrir qué te espera en TORAM.</p>
+  <div class="map-filters" aria-label="Filtros del mapa interactivo oficial">
+    <span class="map-filter todo">Todo</span>
+    <span class="map-filter">Aventura</span>
+    <span class="map-filter">Agua</span>
+    <span class="map-filter">Cultura</span>
+  </div>
+  <div class="map-card">
+    <p>El mapa interactivo oficial de TORAM Parque Temático te muestra las atracciones en 3D: gira el parque, acércalo y toca cada punto para ver qué hay en cada zona — aventura, agua y cultura.</p>
+    <a class="btn-map" href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">Ver el mapa interactivo en 3D ↗</a>
+  </div>
+  <p class="map-credit">Mapa interactivo oficial de TORAM Parque Temático — <a href="https://toramparque.com/atracciones/" target="_blank" rel="noopener">toramparque.com/atracciones/</a></p>
 </section>
 
 <!-- VIDEO 2 -->
@@ -415,27 +466,27 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
 
   <div class="legal-grid">
     <div class="legal-row">
-      <div class="legal-icon">🏦</div>
+      <div class="legal-icon" aria-hidden="true">🏦</div>
       <div><div class="legal-t">Fideicomiso inmobiliario</div><div class="legal-d">Al momento de la apertura, el terreno de 50,000 m² junto con el parque ya construido se integran a un fideicomiso inmobiliario — separado del patrimonio del desarrollador, dedicado a recibir y administrar los ingresos del parque.</div></div>
     </div>
     <div class="legal-row">
-      <div class="legal-icon">🔒</div>
+      <div class="legal-icon" aria-hidden="true">🔒</div>
       <div><div class="legal-t">Garantía de reembolso del 100%</div><div class="legal-d">Una vez que el parque esté en operación, puedes solicitar la devolución completa de tu capital. Cláusula 16 del contrato.</div></div>
     </div>
     <div class="legal-row">
-      <div class="legal-icon">⚖️</div>
+      <div class="legal-icon" aria-hidden="true">⚖️</div>
       <div><div class="legal-t">Penalización por retraso en apertura</div><div class="legal-d">Si el parque no abre en octubre 2027, el desarrollador paga 0.2% mensual sobre tu capital invertido — a favor tuyo. Cláusula 6.</div></div>
     </div>
     <div class="legal-row">
-      <div class="legal-icon">📋</div>
+      <div class="legal-icon" aria-hidden="true">📋</div>
       <div><div class="legal-t">Participación transferible</div><div class="legal-d">Puedes ceder, vender, heredar o donar tu participación en cualquier momento. No estás atrapado — tienes un activo real. Cláusula 20.</div></div>
     </div>
     <div class="legal-row">
-      <div class="legal-icon">📊</div>
+      <div class="legal-icon" aria-hidden="true">📊</div>
       <div><div class="legal-t">Estados financieros certificados</div><div class="legal-d">Los rendimientos se calculan sobre balances firmados por Contador Público Certificado independiente, entregados vía correo electrónico.</div></div>
     </div>
     <div class="legal-row">
-      <div class="legal-icon">🏛</div>
+      <div class="legal-icon" aria-hidden="true">🏛</div>
       <div><div class="legal-t">Empresa legalmente constituida</div><div class="legal-d">RFC: TRP211008LJ9 · Escritura pública 3802 · Notaría Pública 200 de Mazatlán · Rep. Legal: Paul Antonio Ortega Arredondo.</div></div>
     </div>
   </div>
@@ -454,7 +505,7 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
         <span class="faq-q">¿Qué pasa con mi dinero si el parque no abre en la fecha prometida?</span>
         <span class="faq-arrow">+</span>
       </button>
-      <div class="faq-body">El contrato (Cláusula 6) establece una penalización de 0.2% mensual sobre el total de tus abonos de capital, calculada desde la fecha de incumplimiento hasta que el parque efectivamente abra. Esta penalización es a tu favor — el desarrollador te la paga a ti. No pierdes ni un peso por un retraso.</div>
+      <div class="faq-body">El contrato (Cláusula 6) establece una penalización de 0.2% mensual sobre el total de tus abonos de capital, calculada desde la fecha de incumplimiento hasta que el parque efectivamente abra. Esta penalización es a tu favor — el desarrollador te la paga a ti. La penalización contractual te compensa mes a mes mientras dure el retraso.</div>
     </div>
 
     <div class="faq-item">
@@ -553,20 +604,20 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
   <div class="cta-inner">
     <div class="section-eyebrow" style="color:var(--gold);margin-bottom:1rem">Lo que recibes como socio-propietario</div>
     <div class="beneficios-grid">
-      <div class="ben-item"><div class="ben-icon">💰</div><div class="ben-t">Ganancias trimestrales</div><div class="ben-d">Tu parte de las utilidades llega directo a tu cuenta cada 3 meses</div></div>
-      <div class="ben-item"><div class="ben-icon">📜</div><div class="ben-t">Título de propiedad real</div><div class="ben-d">Certificado de Participación Inmobiliaria — no es un papel, es un activo</div></div>
-      <div class="ben-item"><div class="ben-icon">⭐</div><div class="ben-t">Zona VIP en shows</div><div class="ben-d">Acceso preferencial como dueño del complejo</div></div>
-      <div class="ben-item"><div class="ben-icon">🎟</div><div class="ben-t">5 entradas al año</div><div class="ben-d">Sin costo, por cada participación que tengas</div></div>
-      <div class="ben-item"><div class="ben-icon">🔒</div><div class="ben-t">Reembolso 100%</div><div class="ben-d">Una vez operando, puedes recuperar tu capital completo si decides salir</div></div>
-      <div class="ben-item"><div class="ben-icon">🏖</div><div class="ben-t">Club de Playa Toram</div><div class="ben-d">Membresía exclusiva a precio preferencial para socios</div></div>
+      <div class="ben-item"><div class="ben-icon" aria-hidden="true">💰</div><div class="ben-t">Ganancias trimestrales</div><div class="ben-d">Tu parte de las utilidades llega directo a tu cuenta cada 3 meses</div></div>
+      <div class="ben-item"><div class="ben-icon" aria-hidden="true">📜</div><div class="ben-t">Título de propiedad real</div><div class="ben-d">Certificado de Participación Inmobiliaria — no es un papel, es un activo</div></div>
+      <div class="ben-item"><div class="ben-icon" aria-hidden="true">⭐</div><div class="ben-t">Zona VIP en shows</div><div class="ben-d">Acceso preferencial como dueño del complejo</div></div>
+      <div class="ben-item"><div class="ben-icon" aria-hidden="true">🎟</div><div class="ben-t">5 entradas al año</div><div class="ben-d">Sin costo, por cada participación que tengas</div></div>
+      <div class="ben-item"><div class="ben-icon" aria-hidden="true">🔒</div><div class="ben-t">Reembolso 100%</div><div class="ben-d">Una vez operando, puedes recuperar tu capital completo si decides salir</div></div>
+      <div class="ben-item"><div class="ben-icon" aria-hidden="true">🏖</div><div class="ben-t">Club de Playa Toram</div><div class="ben-d">Membresía exclusiva a precio preferencial para socios</div></div>
     </div>
 
     <div class="cta-title serif">Solo 1,000 participaciones al público. Ya van más de 400.</div>
     <p class="cta-sub">Un activo de $2,000,000,000 MXN al alcance de cualquier persona. Cuando se completen las participaciones, esta oportunidad cierra para siempre.</p>
-    <p class="cta-name">Rafael Pérez · Asesor de Inversiones Toram · Mazatlán, Sinaloa</p>
+    <p class="cta-name">Cristobal Rafael · Asesor de Inversiones Toram · Mazatlán, Sinaloa</p>
     <div class="cta-buttons">
-      <a class="btn-wa" href="https://wa.me/526691393136?text=Hola%20Rafael%2C%20vi%20la%20informaci%C3%B3n%20de%20Toram%20y%20me%20interesa%20saber%20m%C3%A1s%20sobre%20c%C3%B3mo%20invertir." target="_blank" rel="noopener">
-        <span class="btn-wa-icon">📲</span> Quiero ser parte de Toram
+      <a class="btn-wa" href="https://wa.me/526691393136?text=Hola%20Cristobal%20Rafael%2C%20vi%20la%20informaci%C3%B3n%20de%20Toram%20y%20me%20interesa%20saber%20m%C3%A1s%20sobre%20c%C3%B3mo%20invertir." target="_blank" rel="noopener">
+        <span class="btn-wa-icon" aria-hidden="true">📲</span> Quiero ser parte de Toram
       </a>
       <a class="btn-call" href="tel:+526691393136">
         📞 Llamar: 669 139 3136
@@ -576,7 +627,8 @@ footer p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
 </div>
 
 <footer>
-  <p>Toram Residencial y Parque Temático S.A. de C.V. · RFC: TRP211008LJ9<br>
+  <p>Sitio del asesor Cristobal Rafael — Imágenes y marca © TORAM Parque Temático. Sitio oficial: <a href="https://toramparque.com/" target="_blank" rel="noopener" style="color:rgba(255,255,255,.6)">toramparque.com</a><br>
+  Toram Residencial y Parque Temático S.A. de C.V. · RFC: TRP211008LJ9<br>
   Mazatlán, Sinaloa · Representante Legal: Paul Antonio Ortega Arredondo<br>
   <br>Este sitio es material informativo. Las proyecciones financieras son estimaciones y no constituyen garantía de rendimiento.</p>
 </footer>
@@ -618,7 +670,7 @@ const observer=new IntersectionObserver(entries=>{
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
 const navLinks=document.querySelectorAll('.nav-link');
-const sections=['hero','porq','inversion','parque','proceso','legal','faq','contacto'];
+const sections=['hero','video','porq','inversion','parque','mapa','video2','proceso','legal','faq','contacto'];
 window.addEventListener('scroll',()=>{
   let current='';
   sections.forEach(id=>{
